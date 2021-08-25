@@ -109,7 +109,7 @@ module.exports = {
 
                 tournaments = [];
 
-                for (i=0;i<numTournaments;i++){
+                for (i=0;i<ESPNObj.length;i++){
                     var tournament = ESPNObj[i];
                     tournaments.push({
                         "name"           : tournament.name,
