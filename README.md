@@ -15,10 +15,11 @@ A Magic Mirror Module to show Upcoming PGA Tournaments. Once the tournament star
 
 Whats New?
 
-- Updated ESPN.js.
--- Updated line 49: tournament.defendingChamp to verify if defendingChamp exists
-- Updated line 42 to use the length of the Object to avoid errors
--- for (i=0;i<ESPNObj.length;i++)
+# Updated ESPN.js.
+- Updated line 49: tournament.defendingChamp to verify if defendingChamp exists
+# Updated line 42 to use the length of the Object to avoid errors
+- for (i=0;i<ESPNObj.length;i++)
+- Added request to package.json as it is no longer supported on the MM platform
 
 
 # Screen Shots
@@ -62,7 +63,8 @@ Whats New?
 # Installation
 
 1. Navigate into the MagicMirror/modules and execute
-1. Execute git clone https://github.com/mcl8on/MMM-PGA
+2. Execute `git clone https://github.com/mumblebaj/MMM-PGA`
+3. `cd MMM-PGA` and `npm install`
 
 # Configuration
 
