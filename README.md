@@ -11,20 +11,14 @@ https://github.com/MichMich/MagicMirror
 A Magic Mirror Module to show Upcoming PGA Tournaments. Once the tournament starts a configurable Leader Board will be shown along with scores for your favorite golfers.
 
 
-# Version 2.1 Release Notes
+# Release Notes
 
 Whats New?
 
-- Added the player score for the current round to the leaderboards
-- Added an arrow indicator in the leaderboards if the player was invovled in a playoff
-- When a tournamnet is not active show rotate between upcoming tournaments, FedEx Cup Standings and Official World Golf Rankings
-- Added an option to read the favorite information from a remote location. The favorites file can be read from a web location or from a file stored in the MMM-PGA directory.
-- Added ability to send a post via curl to MM to update the favorites. This option is only available if using a remote file to store favaorites. This allows you to change the favorites without restarting the Magic Mirror.
-- Added an option to display larger fonts. The standard option is for fonts to be displayed using the standard MM style xsmall. If the larger font option is chosen the small MM style will be used.
-- Created an option to hide the purse. If a larger font is chosen hiding the purse can lead to a cleaner display
-- Added a more detail status to the leader board header
-- Cleaned up Header to use standard MM header style. 
-- Code refactoring
+- Updated ESPN.js.
+-- Updated line 49: tournament.defendingChamp to verify if defendingChamp exists
+- Updated line 42 to use the length of the Object to avoid errors
+-- for (i=0;i<ESPNObj.length;i++)
 
 
 # Screen Shots
