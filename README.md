@@ -15,9 +15,9 @@ A Magic Mirror Module to show Upcoming PGA Tournaments. Once the tournament star
 
 Whats New?
 
-# Updated ESPN.js.
+### Updated ESPN.js.
 - Updated line 49: tournament.defendingChamp to verify if defendingChamp exists
-# Updated line 42 to use the length of the Object to avoid errors
+### Updated line 42 to use the length of the Object to avoid errors
 - for (i=0;i<ESPNObj.length;i++)
 - Added request to package.json as it is no longer supported on the MM platform
 
