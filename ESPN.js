@@ -111,10 +111,14 @@ module.exports = {
 
                 for (i=0;i<ESPNObj.length;i++){
                     var tournament = ESPNObj[i];
+                    var tourName = tournament.name ? tournament.name : ""
+                    var strDate = tournament.startDate ? tournament.startDate : ""
+                    var nDate = tournament.endDate ? tournament.endDate : ""
+                    var venue = tournament.locations[0] ? tournament.locations[0].venue.fullName : ""
                     tournaments.push({
-                        "name"           : tournament.name,
-                        "date"           : this.getEventDate(tournament.startDate,tournament.endDate),
-                        "location"       : tournament.locations[0].venue.fullName,
+                        "name"           : tourName, //tournament.name,
+                        "date"           : this.getEventDate(strDate, nDate),  //tournament.startDate,tournament.endDate),
+                        "location"       : venue, //tournament.locations[0].venue.fullName,
                         "purse"          : this.setUndefStr(tournament.purse,"TBD"),
                         "defendingChamp" : this.setUndefStr(tournament.athlete.name)
 
