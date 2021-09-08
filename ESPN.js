@@ -91,7 +91,7 @@ module.exports = {
     },
 
     getTournaments: function(numTournaments, callback){
-
+        var totalTourn = 0
         request({
             url: this.urlTournamentList,
             method: 'GET'
@@ -107,9 +107,15 @@ module.exports = {
                     return ((tournament.status == "pre")||(tournament.status == "in"));
                 });
 
+                if(numTournaments > ESPNObj.length) {
+                    totalTourn = ESPNObj.length
+                } else {
+                    totalTourn = numTournaments
+                }
+
                 tournaments = [];
 
-                for (i=0;i<numTournaments;i++){
+                for (i=0;i<totalTourn;i++){
                     var tournament = ESPNObj[i];
                     var tourName = tournament.name ? tournament.name : ""
                     var strDate = tournament.startDate ? tournament.startDate : ""
