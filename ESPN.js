@@ -109,7 +109,7 @@ module.exports = {
 
                 tournaments = [];
 
-                for (i=0;i<ESPNObj.length;i++){
+                for (i=0;i<numTournaments;i++){
                     var tournament = ESPNObj[i];
                     var tourName = tournament.name ? tournament.name : ""
                     var strDate = tournament.startDate ? tournament.startDate : ""
