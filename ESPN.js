@@ -44,7 +44,7 @@ module.exports = {
             tournament.date = this.getEventDate(event.date, event.endDate);
             tournament.location = this.getEventLocation(event);
             tournament.statusCode = event.status.type.name;
-            tournament.status = event.competitions[0].status.type.detail;
+            tournament.status = event.competitions[0].status ? event.competitions[0].status.type.detail : "";
             tournament.purse = event.displayPurse;
             tournament.defendingChamp = event.defendingChampion ? event.defendingChampion.athlete.displayName : ""
             tournament.currentRound = this.getCurrentRound(event);
@@ -145,7 +145,7 @@ module.exports = {
 
         //logic to handle playoffs For now we only showing information pertaininhg to rounds in regulation
 
-        currentRound = event.competitions[0].status.period;
+        currentRound = event.competitions[0].status ? event.competitions[0].status.period : "";
         totalRounds = event.tournament.numberOfRounds;
         return (currentRound<=totalRounds)?currentRound:totalRounds;
 
