@@ -103,6 +103,21 @@ Module.register("MMM-PGA", {
 
     },
 
+    stop: function () {
+        Log.info('Stopping module ' + this.name);
+      },
+    
+      resume: function () {
+        Log.info('Resuming module ' + this.name);
+        Log.debug('with config: ' + JSON.stringify(this.config));
+        this.suspend = false;
+        this.updateDom()
+      },
+    
+      suspend: function () {
+        Log.info('Suspending module ' + this.name);
+        this.suspend = true;
+      },
 
     //If Configured for a remote file retrieve the favorites from remote source
     //Set up the boared index and numboard properties
@@ -120,8 +135,6 @@ Module.register("MMM-PGA", {
     },
 
     getFavoriteFile: function (callback) {
-
-        
         var xobj = new XMLHttpRequest(),
 		    isRemote = this.config.remoteFavoritesFile.indexOf("http://") === 0 || this.config.remoteFavoritesFile.indexOf("https://") === 0,
             path = isRemote ? this.config.remoteFavoritesFile : this.file(this.config.remoteFavoritesFile);      
@@ -147,9 +160,7 @@ Module.register("MMM-PGA", {
 
         th.innerHTML = val;
         return th;
-
     },
-
 
     //Create a TD for the Leader Board
 
@@ -161,11 +172,9 @@ Module.register("MMM-PGA", {
         td.innerHTML = val;
             
         return td;
-
     },
 
     getScoreColorClass: function(val){
-
         var cl = [];
 
         colorClass = "";
@@ -209,8 +218,6 @@ Module.register("MMM-PGA", {
             }    
         }
 
-         
-        
         if (this.boardIndex == 0) {
             len = players.length < this.config.maxLeaderboard ? players.length : this.config.maxLeaderboard;
         }
