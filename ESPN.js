@@ -46,7 +46,7 @@ module.exports = {
             tournament.statusCode = event.status.type.name;
             tournament.status = event.competitions[0].status ? event.competitions[0].status.type.detail : "";
             tournament.purse = event.displayPurse;
-            tournament.defendingChamp = event.defendingChampion ? event.defendingChampion.athlete.displayName : ""
+            tournament.defendingChamp = event.defendingChampion ? event.defendingChampion.displayName : ""
             tournament.currentRound = this.getCurrentRound(event);
             tournament.playoff = false;
 
@@ -66,14 +66,14 @@ module.exports = {
                     if (espnPlayer.status.playoff) tournament.playoff = true;
                     
                     tournament.players.push({
-                        "name"      : espnPlayer.athlete.displayName,
+                        "name"      : espnPlayer.team ? espnPlayer.team.displayName : espnPlayer.athlete.displayName,
                         "position"  : espnPlayer.status.position.displayName,
                         "posId"     : parseInt(espnPlayer.status.position.id),
-                        "flagHref"  : espnPlayer.athlete.flag.href,
+                        "flagHref"  : espnPlayer.athlete ? espnPlayer.athlete.flag.href : "",
                         "score"     : espnPlayer.statistics[0].displayValue,
                         "thru"      : this.getPlayerThru(espnPlayer),
                         "roundScore": this.getRoundScore(espnPlayer, tournament.currentRound),
-                        "id"        : espnPlayer.athlete.id,
+                        "id"        : espnPlayer.athlete ? espnPlayer.athlete.id : "",
                         "sortOrder" : espnPlayer.sortOrder,
                         "playoff"   : espnPlayer.status.playoff
                     });

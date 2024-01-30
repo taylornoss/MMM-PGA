@@ -1,15 +1,10 @@
 # MMM-PGA
 
-This a module for MagicMirror <br>
+This a module for MagicMirror² <br>
 https://magicmirror.builders <br>
 https://github.com/MichMich/MagicMirror
 
-
-
-
-
-A Magic Mirror Module to show Upcoming PGA Tournaments. Once the tournament starts a configurable Leader Board will be shown along with scores for your favorite golfers.
-
+A MagicMirror² Module to show Upcoming PGA Tournaments. Once the tournament starts a configurable Leader Board will be shown along with scores for your favorite golfers.
 
 # Release Notes
 
@@ -31,36 +26,33 @@ Whats New?
 
 ### With Location
 
-![image](https://user-images.githubusercontent.com/71428005/95587946-beb1a600-0a10-11eb-8b29-eab31d933889.png)
+![image](images/screenshot-1.png)
 
 ### No Locations
 
-![image](https://user-images.githubusercontent.com/71428005/95589323-93c85180-0a12-11eb-9e4c-7490d6b66e82.png)
+![image](images/screenshot-2.png)
 
 ### Fedex Cup Standings
-![image](https://user-images.githubusercontent.com/71428005/97656396-c37cdf00-1a3d-11eb-81e9-ed8a23b3af96.png)
+![image](images/screenshot-3.png)
 
 ### OWGR with Large Font
 
-![image](https://user-images.githubusercontent.com/71428005/97656777-a85e9f00-1a3e-11eb-95e8-8b6e8a7d49dc.png)
+![image](images/screenshot-4.png)
 
 ## Leader Board View
 
 ### Color With Flags Large Font
-![image](https://user-images.githubusercontent.com/71428005/97656946-0c816300-1a3f-11eb-9f81-fa0de18eb2bc.png)
+![image](images/screenshot-5.png)
 
 
 ### No Color With Flag
 
-![image](https://user-images.githubusercontent.com/71428005/97657099-684bec00-1a3f-11eb-8fd3-3383f4c6567f.png)
+![image](images/screenshot-6.png)
 
 
 
 ## My Favorites View No Flags No Purse
-![image](https://user-images.githubusercontent.com/71428005/97657300-e7412480-1a3f-11eb-98ed-8eab0902eea3.png)
-
-
-
+![image](images/screenshot-7.png)
 
 
 # Installation

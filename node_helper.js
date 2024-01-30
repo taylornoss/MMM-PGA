@@ -7,13 +7,12 @@
 const NodeHelper = require('node_helper');
 const request = require('request');
 var ESPN = require('./ESPN.js');
-const OWGR = require('./OWGR.js');
-const FEDEXCUP = require('./FEDEXCUP.js');
+// const OWGR = require('./OWGR.js');
+// const FEDEXCUP = require('./FEDEXCUP.js');
 const express = require("express");
 
-
-
 module.exports = NodeHelper.create({
+    requiresVersion: '2.20.0', 
 
     start: function() {
         console.log("Starting node_helper for: " + this.name); 
@@ -52,11 +51,9 @@ module.exports = NodeHelper.create({
         
     },
 
-
     getPGAData: function(numTournaments){
 
         var self = this;
-
 
         ESPN.getTournamentData(function (tournament){
             self.sendSocketNotification("PGA_RESULT",tournament);});
@@ -65,17 +62,16 @@ module.exports = NodeHelper.create({
             self.sendSocketNotification("PGA_TOURNAMENT_LIST",tournaments);});
     },
 
-    getRankingData: function(maxNumRankings){
-        var self = this;
+    // getRankingData: function(maxNumRankings){
+    //     var self = this;
 
-        OWGR.getOWGRData(maxNumRankings, function(owgrRanking){
-            self.sendSocketNotification("OWGR_RANKING",owgrRanking);});
+    //     OWGR.getOWGRData(maxNumRankings, function(owgrRanking){
+    //         self.sendSocketNotification("OWGR_RANKING",owgrRanking);});
 
-        FEDEXCUP.getFedExCupData(maxNumRankings, function(fcRanking){
-            self.sendSocketNotification("FEDEXCUP_RANKING",fcRanking);});
+    //     FEDEXCUP.getFedExCupData(maxNumRankings, function(fcRanking){
+    //         self.sendSocketNotification("FEDEXCUP_RANKING",fcRanking);});
 
-    },
-
+    // },
 
     socketNotificationReceived: function(notification, payload) {
 
@@ -94,7 +90,7 @@ module.exports = NodeHelper.create({
             //Load Data to begin with so we dont have to wait for next server load
             //Each client will make a call at startupß
             this.getPGAData(this.config.numTournaments);
-            this.getRankingData(this.config.maxNumRankings);
+            // this.getRankingData(this.config.maxNumRankings);
             
         }
         
