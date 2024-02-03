@@ -1,7 +1,5 @@
 
-const request = require('request');
-const jsdom = require("jsdom");
-const { JSDOM } = jsdom;
+const request = require('node-fetch');
 const flags = require('./flags.js');
 
 
@@ -10,53 +8,43 @@ const flags = require('./flags.js');
 module.exports = {
 
     url: "https://www.pgatour.com/fedexcup/official-standings.html",
-  
-    getFedExCupData: function(maxPlayers, callback){
+    rapidUrl: 'https://golf-leaderboard-data.p.rapidapi.com/tour-rankings/2/2024',
 
-    request({
-        url: this.url,
-        method: 'GET'
-    }, (error, response, body) => {
+    async getFedExCupData(maxPlayers, rapidAPIKey, callback){
+		var rapidKey = rapidAPIKey;
+		console.log("FEDEX MMM-PGA retrieving FedEx Cup Standings");
 
-
-        console.log("MMM-PGA retrieving FedEx Cup Standings");
-        
-        if (!error && response.statusCode == 200) {
-
-            var fcRanking={pointsHeading: "Total Points", rankings: []};
-           
-
-            var dom = new JSDOM(response.body);
-           
-            var tblCont = dom.window.document.getElementsByClassName("table-fedexcup-standings");
-
-            var tblRows = tblCont[0].querySelectorAll("tr");
-            numPlayers = 0;
-            for (var i = 1; i < tblRows.length; i++) {
-                
-                
-                if (tblRows[i].cells.length >1){
-
-                    numPlayers++;
-
-                    name = tblRows[i].cells[2].textContent;
-                    fcRanking.rankings.push({ 
-                        "name"          : name,
-                        "curPosition"   : tblRows[i].cells[0].textContent,
-                        "lwPosition"    : tblRows[i].cells[1].textContent,
-                        "points"        : tblRows[i].cells[4].textContent.trim(),
-                        "flagUrl"       : flags.getFlagURL(name)
-                    });
-
-                    if (numPlayers == maxPlayers) break;
-                }
+        const response = await fetch(this.rapidUrl, {
+            method: 'GET',
+            headers: {
+                'X-RapidAPI-Key': rapidKey,
+                'X-RapidAPI-Host': 'golf-leaderboard-data.p.rapidapi.com'
             }
-            //Function to send SocketNotification with the Tournament Data
-            callback(fcRanking);
-        } else {
-            console.log("MMM-PGA Error Loading Fedex Cup Data Error Code:" + JSON.stringify(error) + " Status Code: " + response.statusCode );
-        }
-    });
+        })
+		
+		const data = await response.json();
+
+        var fcRanking = {
+            pointsHeading: "Total Points",
+            rankings: []
+        };
+        var payload = data;
+        if (payload.results.rankings.length > 1) {
+            for (var i = 0; i < payload.results.rankings.length; i++) {
+				flagName = payload.results.rankings[i].player_name.replace(/\s/g, '');
+				var lstposition = payload.results.rankings[i].position + payload.results.rankings[i].movement
+                fcRanking.rankings.push({
+                    "name": payload.results.rankings[i].player_name,
+                    "curPosition": payload.results.rankings[i].position,
+                    "lwPosition": lstposition,
+                    "points": payload.results.rankings[i].points,
+                    "flagUrl": flags.getFlagURL(flagName)
+                });
+                if (i == maxPlayers)
+                    break;
+            }
+        } 
+        callback(fcRanking);
     }
 
 };

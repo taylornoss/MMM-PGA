@@ -36,6 +36,7 @@ Module.register("MMM-PGA", {
         showFlags: false,
         largerFont: false,
         remoteFavoritesFile: null,
+        rapidAPIKey: "rapid-api-key",
         favorites: [],
 
     },
@@ -72,14 +73,14 @@ Module.register("MMM-PGA", {
         }
 
 
-        //Set up For Showing Info when a tournament is not activer
+        //Set up For Showing Info when a tournament is not active
         this.nonActiveIndex=0;    //Start With Tournament List
         this.upcomingTournamentHeader = "Upcoming PGA TOURNAMENTS";
-        // this.fedexCupHeader = "FEDEX CUP STANDINGS";
-        // this.owgrHeader = "OFFICIAL WORLD GOLF RANKING";
-        // this.rankingObjs = {};
+        this.fedexCupHeader = "FEDEX CUP STANDINGS";
+        this.owgrHeader = "OFFICIAL WORLD GOLF RANKING";
+        this.rankingObjs = {};
         //Set number of rankings to MAX if user requested more than max
-        // if (this.config.numRankings >this.config.maxNumRankings) this.config.numRankings=this.config.maxNumRankings;
+        if (this.config.numRankings > this.config.maxNumRankings) this.config.numRankings = this.config.maxNumRankings;
 
 
         //Set up for Active tournament
@@ -597,14 +598,14 @@ Module.register("MMM-PGA", {
             this.updateDom(this.config.animationSpeed);
 
         }  
-        // else if (notification =="OWGR_RANKING") {
-        //     this.rankingObjs.owgr = {headerTxt: this.owgrHeader, rankingObj: payload};
-        //     this.updateDom(this.config.animationSpeed);
-        // }
-        // else if (notification == "FEDEXCUP_RANKING"){
-        //     this.rankingObjs.fedex = {headerTxt: this.fedexCupHeader, rankingObj: payload};
-        //     this.updateDom(this.config.animationSpeed);
-        // }
+        else if (notification =="OWGR_RANKING") {
+            this.rankingObjs.owgr = {headerTxt: this.owgrHeader, rankingObj: payload};
+            this.updateDom(this.config.animationSpeed);
+        }
+        else if (notification == "FEDEXCUP_RANKING"){
+            this.rankingObjs.fedex = {headerTxt: this.fedexCupHeader, rankingObj: payload};
+            this.updateDom(this.config.animationSpeed);
+        }
         else if (notification =="UPDATE_FAVORITES") {
             console.log("MMM-PGA: Update Favorites");
             this.updateFavorites();

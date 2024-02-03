@@ -11,14 +11,17 @@ A MagicMirror² Module to show Upcoming PGA Tournaments. Once the tournament sta
 Whats New?
 
 ## Dependencies
-- request@2.88.2
+- node-fetch
 
-### Updated ESPN.js.
-- Updated line 49: tournament.defendingChamp to verify if defendingChamp exists
-### Updated line 42 to use the length of the Object to avoid errors
-- for (i=0;i<ESPNObj.length;i++)
-- Added request to package.json as it is no longer supported on the MM platform
-
+## Updates
+### v1.3.0 2024/02/03
+- Removed request
+- Add node-fetch@2.6.1
+- Remove jsdom
+- Change FEDEXCUP and OWGR to RapidAPI due to changes to original websites and scraping them
+- RapidAPI Key Required
+- Get a key by sunscribing to the following API on RapidAPI: [Golf Leaderboard Data](https://rapidapi.com/sportcontentapi/api/golf-leaderboard-data) 
+- New option added to config: rapidAPIKey
 
 # Screen Shots
 
@@ -91,16 +94,19 @@ Option|Description
 			maxWidth: "100%",
 			config: {
 				colored: true,
+				rotateInterval: 30 * 1000,
+				animationSpeed: 5,
 				showBoards: true,
 				showLocation: true,
 				numRankings: 10,
-				numTournaments: 3,
+				numTournaments: 5,
 				numLeaderboard: 5,
 				maxLeaderboard: 10,
 				includeTies: true,
 				showLogo: true,
 				showFlags: true,
-				remoteFavoritesFile: "https://dl.dropboxusercontent.com/s/7my######/favorites.json" //"utilities/favorites.json" 
+				rapidAPIKey: "your-rapidapi-key-here",
+				remoteFavoritesFile: "utilities/favorites.json" //"https://dl.dropboxusercontent.com/s/7my######/favorites.json"
 			}
 		},	
 	
