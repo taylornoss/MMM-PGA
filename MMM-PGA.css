@@ -3,13 +3,12 @@
  * Use any colors you want! Go to - "http://htmlcolorcodes.com/color-picker/"
  * Pick your color, copy and paste the HEX number. Example - #62FF00 = bright green.
  */
- 
- .MMM-PGA{
-   min-width: 300px;
- }
+.MMM-PGA {
+  min-width: 300px;
+}
 
 
-.MMM-PGA .leaderboard-separator{
+.MMM-PGA .leaderboard-separator {
   font-size: 15.5px;
   line-height: 18px;
   margin-top: 5px;
@@ -21,139 +20,144 @@
 
 }
 
-.MMM-PGA .leaderboard-separator .event-status{
+.MMM-PGA .leaderboard-separator .event-status {
   float: right;
 }
 
-.MMM-PGA .leaderboard-table{
+.MMM-PGA .leaderboard-table {
   color: white;
-  margin-bottom: 1rem!important;
+  margin-bottom: 1rem !important;
 }
 
-.MMM-PGA .leaderboard-table th{
+.MMM-PGA .leaderboard-table th {
   text-align: center;
 }
 
-.MMM-PGA .leaderboard-table .th-left-aligned{
+.MMM-PGA .leaderboard-table .th-left-aligned {
   text-align: left;
 }
 
-.MMM-PGA .leaderboard-table .th-color{
-  color: rgb(103,125,161);
+.MMM-PGA .leaderboard-table .th-color {
+  color: rgb(103, 125, 161);
 }
 
-.MMM-PGA .leaderboard-table td{
+.MMM-PGA .leaderboard-table td {
   text-align: left;
   padding-top: 0px;
   padding-bottom: 0px;
 }
-.MMM-PGA .leaderboard-table .td-center-aligned{
+
+.MMM-PGA .leaderboard-table .td-center-aligned {
   text-align: center;
 
 }
 
-.MMM-PGA .leaderboard-table .td-total-under{
+.MMM-PGA .leaderboard-table .td-total-under {
   color: red;
 }
 
-.MMM-PGA .leaderboard-table .td-total-even{
+.MMM-PGA .leaderboard-table .td-total-even {
   color: green;
 }
 
-.MMM-PGA .leaderboard-table .td-total-above{
+.MMM-PGA .leaderboard-table .td-total-above {
   color: rgb(122, 228, 255);
 }
 
-.MMM-PGA .leaderboard-table .td-img{
+.MMM-PGA .leaderboard-table .td-img {
   width: 25px;
   padding-right: 0px;
   padding-left: 0px;
   margin-left: 0px;
 }
 
-.MMM-PGA .leaderboard-table .td-playoff{
+.MMM-PGA .leaderboard-table .td-playoff {
   text-align: right;
   padding-right: 3px;
 }
 
-.MMM-PGA .tournament-table{
+.MMM-PGA .tournament-table {
   max-width: 500px;
   border-collapse: collapse;
   line-height: 18px;
 }
 
-.MMM-PGA .tournament-table td{ 
+.MMM-PGA .tournament-table td {
   padding-right: 2px;
   margin: 2px;
   text-align: left;
-  vertical-align: top;  
+  vertical-align: top;
 }
 
 
-.MMM-PGA .tournament-table .border{
+.MMM-PGA .tournament-table .border {
   border-bottom: solid 1px;
   border-bottom-color: rgb(34, 34, 34);
 }
 
-.MMM-PGA .tournament-table td.date-cell{
+.MMM-PGA .tournament-table td.date-cell {
   padding-right: 2px;
   margin: 2px;
   width: 30%;
 }
 
-.MMM-PGA .tournament-table td.purse-cell{
+.MMM-PGA .tournament-table td.purse-cell {
   padding-right: 2px;
   margin: 2px;
   text-align: right;
   white-space: nowrap;
 }
 
-.MMM-PGA .tournament-table td.loc-cell{
+.MMM-PGA .tournament-table td.loc-cell {
   font-size: 12px;
   padding-right: 2px;
   margin: 2px;
   text-align: left;
 }
 
-.MMM-PGA .ranking-table{
+.MMM-PGA .ranking-table {
   max-width: 500px;
 }
 
-.MMM-PGA .ranking-table td{
+.MMM-PGA .ranking-table td {
   border-bottom: solid 1px;
   border-bottom-color: rgb(34, 34, 34);
   text-align: center;
 }
 
-.MMM-PGA .ranking-table td.player-name{
+.MMM-PGA .ranking-table td.player-name {
   text-align: left;
   padding-left: 5px;
 }
 
-.MMM-PGA .ranking-table td.img{
+.MMM-PGA .ranking-table td.img {
   width: 25px;
   padding-right: 0px;
 }
 
-.MMM-PGA .ranking-table th{
+.MMM-PGA .ranking-table th {
   text-align: center;
 }
 
-.MMM-PGA .ranking-table .color-headings{
+.MMM-PGA .ranking-table .color-headings {
   /*color: rgb(103,125,161);*/
   color: rgb(119, 141, 190);
 }
 
-.MMM-PGA .ranking-table th.player-name{
+.MMM-PGA .ranking-table th.player-name {
   text-align: left;
   padding-left: 2px;
   vertical-align: bottom;
 }
 
-.MMM-PGA .ranking-table .up{
+.MMM-PGA .ranking-table .up {
   color: green;
 }
 
-.MMM-PGA .ranking-table .down{
+.MMM-PGA .ranking-table .down {
   color: red;
+}
+.xxsmall{
+  font-size: 0.6rem;
+  line-height: 1.25;
 }

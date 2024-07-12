@@ -368,7 +368,7 @@ Module.register("MMM-PGA", {
 
                 var locationTd = document.createElement("td");
                 locationTd.colSpan = 2;
-                locationTd.classList.add("xsmall");
+                locationTd.classList.add("xxsmall");
                 if (border) locationTd.classList.add("border");
                 locationTd.innerHTML = tournament.location;
                 secondRow.appendChild(locationTd);
