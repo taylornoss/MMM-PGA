@@ -1,6 +1,6 @@
 
 const moment = require('moment');
-const request = require('node-fetch');
+const LOG = require('logger');
 
 module.exports = {
 
@@ -16,73 +16,76 @@ module.exports = {
             method: 'get'
         })
 
-            const body = await response.json();
+        const body = await response.json();
 
-        var ESPNObj = body.events;
         //sort events by purse
-        var events = ESPNObj.sort((e1,e2) => (e1.purse < e2.purse)? 1 : (e1.purse < e2.purse) ? -1 : 0);
+        var ESPNObj = body.events.sort((e1, e2) => (e1.purse < e2.purse) ? 1 : (e1.purse < e2.purse) ? -1 : 0);
 
-        // 7/11/24 - get the first primary event that isn't canceled - array.find only returns 1 object
-        var event = ESPNObj.find(event => event.primary === true && event.status.type.name !== 'STATUS_CANCELED');
+        // Filter out any canceled events
+        var events = ESPNObj.filter(event => event.status.type.name !== 'STATUS_CANCELED');
 
-        tournament = {};
+        let tournaments = [];
+        events.forEach((event) => {
+            let tournament = {};
 
-        //Tournament Details
-        tournament.name = event.shortName;
-        tournament.date = this.getEventDate(event.date, event.endDate);
-        tournament.location = this.getEventLocation(event);
-        tournament.statusCode = event.status.type.name;
-        tournament.status = event.competitions[0].status ? event.competitions[0].status.type.detail : "";
-        tournament.purse = event.displayPurse;
-        tournament.defendingChamp = event.defendingChampion ? event.defendingChampion.athlete.displayName : ""
+            //Tournament Details
+            tournament.name = event.shortName;
+            tournament.date = this.getEventDate(event.date, event.endDate);
+            tournament.location = this.getEventLocation(event);
+            tournament.statusCode = event.status.type.name;
+            tournament.status = event.competitions[0].status ? event.competitions[0].status.type.detail : "";
+            tournament.purse = event.displayPurse;
+            tournament.defendingChamp = event.defendingChampion ? event.defendingChampion.athlete.displayName : ""
             tournament.currentRound = this.getCurrentRound(event);
-        tournament.playoff = false;
+            tournament.playoff = false;
 
-        //Load the Players for the tournament
+            //Load the Players for the tournament
 
-        tournament.players = [];
+            tournament.players = [];
 
-        if (tournament.statusCode != "STATUS_SCHEDULED") {
+            if (tournament.statusCode != "STATUS_SCHEDULED") {
 
-            var espnPlayers = event.competitions[0].competitors;
+                var espnPlayers = event.competitions[0].competitors;
 
-            for (var i in espnPlayers) {
+                for (var i in espnPlayers) {
 
-                var espnPlayer = espnPlayers[i];
-                if (espnPlayer.status.playoff)
-                    tournament.playoff = true;
+                    var espnPlayer = espnPlayers[i];
+                    if (espnPlayer.status.playoff)
+                        tournament.playoff = true;
 
-                tournament.players.push({
-                    "name": espnPlayer.athlete.displayName,
-                    "position": espnPlayer.status.position.displayName,
-                    "posId": parseInt(espnPlayer.status.position.id),
-                    "flagHref": espnPlayer.athlete.flag.href,
-                    "score": espnPlayer.statistics[0].displayValue,
-                    "thru": this.getPlayerThru(espnPlayer),
-                    "roundScore": this.getRoundScore(espnPlayer, tournament.currentRound),
-                    "id": espnPlayer.athlete.id,
-                    "sortOrder": espnPlayer.sortOrder,
-                    "playoff": espnPlayer.status.playoff
-                });
+                    tournament.players.push({
+                        "name": espnPlayer.athlete.displayName,
+                        "position": espnPlayer.status.position.displayName,
+                        "posId": parseInt(espnPlayer.status.position.id),
+                        "flagHref": espnPlayer.athlete.flag.href,
+                        "score": espnPlayer.statistics[0].displayValue,
+                        "thru": this.getPlayerThru(espnPlayer),
+                        "roundScore": this.getRoundScore(espnPlayer, tournament.currentRound),
+                        "id": espnPlayer.athlete.id,
+                        "sortOrder": espnPlayer.sortOrder,
+                        "playoff": espnPlayer.status.playoff
+                    });
+                }
+                tournaments.push(tournament);
             }
-        }
+        });
         //Function to send SocketNotification with the Tournament Data
-        callback(tournament);
+        callback(tournaments);
     },
 
     async getTournaments(numTournaments, callback) {
         var totalTourn = 0
 
-            const response = await fetch(this.url, {
-                method: 'get',
-            })
+        const response = await fetch(this.urlTournamentList, {
+            method: 'get',
+        })
 
-            const body = await response.json();
-
+        const body = await response.json();
+        
         var ESPNObj = body.events;
 
         //Only look at future Tournaments
-        ESPNObj = ESPNObj.filter(tournament => tournament.status == "pre" || tournament.status == "in");
+        ESPNObj = ESPNObj.filter(tournament => tournament.status == "pre");
 
         if (numTournaments > ESPNObj.length) {
             totalTourn = ESPNObj.length

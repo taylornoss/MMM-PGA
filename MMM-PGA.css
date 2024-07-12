@@ -27,6 +27,7 @@
 
 .MMM-PGA .leaderboard-table{
   color: white;
+  margin-bottom: 1rem!important;
 }
 
 .MMM-PGA .leaderboard-table th{
@@ -156,9 +157,3 @@
 .MMM-PGA .ranking-table .down{
   color: red;
 }
-
-
-
-
-
-

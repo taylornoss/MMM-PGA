@@ -8,14 +8,13 @@
 
 Module.register("MMM-PGA", {
 
-    requiresVersion: "2.1.0",
+    requiresVersion: "2.20.0",
 
     // Module config defaults.
     defaults: {
         useHeader: true,
         header: "PGA Tournanment",
         minWidth: "300px",
-        rotateInterval: 30 * 1000,
         animationSpeed: 0, // fade in and out speed
         initialLoadDelay: 4250,
         retryDelay: 2500,
@@ -53,8 +52,6 @@ Module.register("MMM-PGA", {
     start: function () {
         Log.info("Starting module: " + this.name);
 
-        var self=this;
-
         // Image Set Up
         this.pgalogohtml = "<img src='./modules/MMM-PGA/images/PGAlogo.png' alt='' align=bottom height=15 width=15></img> ";
         this.flaghtml = "<img src='http' alt='' align=top height=22 width=22></img>";
@@ -86,12 +83,13 @@ Module.register("MMM-PGA", {
         //Set up for Active tournament
         this.boardIndex = 0;       //Starts with the Leaderboard
         this.leaderboardHeader ="LEADERBOARD";
-        this.rotateInterval = null;
-        this.tournament = null;
-        this.tournaments = null;
+        this.currentTournaments = null;
+        this.futureTournaments = null;
         this.loaded = false;
         this.tournamentsLoaded = false;
         this.numBoards = 1 + this.config.favorites.length;
+
+        this.multipleCurrent = false;
 
         this.updateFavorites();
 
@@ -268,7 +266,11 @@ Module.register("MMM-PGA", {
         lbhead.appendChild(this.buildTh("TOTAL"));
         lbhead.appendChild(this.buildTh("THRU"));
 
-        //Body of the Table Loop through the Players add a Row For Each Player        
+        //Body of the Table Loop through the Players add a Row For Each Player
+        var maxVal = this.config.numLeaderboard;
+        if(this.multipleCurrent)     {
+            maxVal /= 2; //show half as many if there are multiple tournaments
+        }
         var lastpos = 0;
         for (i = 0; i < len; i++) {
 
@@ -279,9 +281,9 @@ Module.register("MMM-PGA", {
             //Favorites will display ALL
             if (this.boardIndex == 0) {
 
-                if (i == this.config.numLeaderboard - 1) lastpos = playerpos;
+                if (i == maxVal - 1) lastpos = playerpos;
 
-                if (i > this.config.numLeaderboard - 1) {
+                if (i > maxVal - 1) {
                     if (playerpos > lastpos || !this.config.includeTies) break;
                 } 
             }
@@ -326,19 +328,15 @@ Module.register("MMM-PGA", {
 
         var firstRowClasses = [ this.fontClass, "bright" ];
         
+        tournaments.forEach(tournament => {
 
-        for(var i in tournaments) { 
-
-            
-            var tournament = tournaments[i];
-            
             var trow = document.createElement("tr");
             tourTable.appendChild(trow);
 
             var dateTd = document.createElement("td");
-            dateTd.classList.add( ...firstRowClasses, "date-cell");
+            dateTd.classList.add(...firstRowClasses, "date-cell");
             if (border) dateTd.classList.add("border");
-            if (this.config.showLocation) dateTd.rowSpan =2;
+            if (this.config.showLocation) dateTd.rowSpan = 2;
             dateTd.innerHTML = tournament.date;
             trow.appendChild(dateTd);
 
@@ -352,9 +350,9 @@ Module.register("MMM-PGA", {
             if (this.config.showPurse) {
 
                 var purseTd = document.createElement("td");
-                purseTd.classList.add(...firstRowClasses,"purse-cell");
-                if(border) purseTd.classList.add("border");
-                if (this.config.showLocation) purseTd.rowSpan =2;
+                purseTd.classList.add(...firstRowClasses, "purse-cell");
+                if (border) purseTd.classList.add("border");
+                if (this.config.showLocation) purseTd.rowSpan = 2;
                 purseTd.innerHTML = "Purse: " + tournament.purse;
                 trow.appendChild(purseTd);
             }
@@ -362,21 +360,21 @@ Module.register("MMM-PGA", {
             tourTable.appendChild(trow);
 
             //Second Row
-            if (this.config.showLocation){
+            if (this.config.showLocation) {
 
                 var secondRow = document.createElement("tr");
-            
+
                 tourTable.appendChild(secondRow);
 
                 var locationTd = document.createElement("td");
-                locationTd.colSpan =2;
+                locationTd.colSpan = 2;
                 locationTd.classList.add("xsmall");
                 if (border) locationTd.classList.add("border");
-                locationTd.innerHTML = tournament.location; 
+                locationTd.innerHTML = tournament.location;
                 secondRow.appendChild(locationTd);
             }
-        }
-        
+        });
+
 
         return tourTable;
 
@@ -474,25 +472,29 @@ Module.register("MMM-PGA", {
         return rankTable;
     },
 
-
-
-    buildHeader: function(showActive){
+    buildLeaderBoardHeader: function(){
 
         var header = document.createElement("header");
-
-        if (showActive){
-            headerText = this.config.header;
-        } else {
-            if (this.nonActiveIndex == 0){
-                headerText = this.upcomingTournamentHeader;
-            } else {
-                obj = Object.entries(this.rankingObjs)[this.nonActiveIndex-1][1];
-                headerText = obj.headerTxt;
-            }
-        }
-       
+        headerText = this.config.header;
         header.innerHTML =  headerText;
         if (this.config.showLogo){
+            header.innerHTML = this.pgalogohtml + header.innerHTML;
+        }
+        return header;
+    },
+
+    buildFutureEventsHeader: function(){
+
+        var header = document.createElement("header");
+        if (this.nonActiveIndex == 0) {
+            headerText = this.upcomingTournamentHeader;
+        } else {
+            obj = Object.entries(this.rankingObjs)[this.nonActiveIndex - 1][1];
+            headerText = obj.headerTxt;
+        }
+
+        header.innerHTML = headerText;
+        if (this.config.showLogo) {
             header.innerHTML = this.pgalogohtml + header.innerHTML;
         }
         return header;
@@ -501,9 +503,6 @@ Module.register("MMM-PGA", {
     /* Main Magic Mirror module to build the Contect of the module*/
 
     getDom: function () {
-
-        var self = this;
-
         var wrapper = document.createElement("div");
         wrapper.className = "wrapper";
         wrapper.style.maxWidth = this.config.maxWidth;
@@ -515,85 +514,48 @@ Module.register("MMM-PGA", {
             return wrapper;
         }
 
-
-
-
-        var tourney = this.tournament;
-        var tourneyScheduled = (tourney.statusCode == "STATUS_SCHEDULED");
-
-
-
-
-        var showActive = (!tourneyScheduled && this.config.showBoards);
-
-        // creating the header
-        if (this.config.useHeader != false) {   
-            wrapper.appendChild(this.buildHeader(showActive));
-        }
-
-        //If Tounament not in Progress Show the upcoming tournaments and rankings   
-        if (!showActive){
-
-            if (this.nonActiveIndex == 0){
-                list = this.buildTournamentList(this.tournaments);
-            } else {
-                rankingObj = Object.entries(this.rankingObjs)[this.nonActiveIndex-1][1].rankingObj;
-                list = this.buildRankList(rankingObj);
-            }
-            
-            wrapper.appendChild(list);
-            return wrapper;
-        }    
-
-        //Tounament is in progress and Module is confugred to show boards
-        //So build the boards
-        curTourneyList = [tourney];
-        tdetails = this.buildTournamentList(curTourneyList,false);
-        wrapper.appendChild(tdetails);
-
-        if (this.config.showBoards) {
+        //build leader board for each current tournament
+        this.currentTournaments.forEach(tourney => {
+            wrapper.appendChild(this.buildLeaderBoardHeader())
+            var curTourneyList = [tourney];
+            tdetails = this.buildTournamentList(curTourneyList, false);
+            wrapper.appendChild(tdetails);
+            //maybe need to do some checking if the tournament hasn't started yet?
             var leaderboard = this.buildLeaderBoard(tourney);
             wrapper.appendChild(leaderboard);
+        });
+        console.log(this.futureTournaments);
+        // Build Upcoming Tournament List
+        wrapper.appendChild(this.buildFutureEventsHeader());
+        list = this.buildTournamentList(this.futureTournaments);
+        
+        wrapper.appendChild(list);
+        /* NO RANKINGS FOR NOW
+        else {
+            rankingObj = Object.entries(this.rankingObjs)[this.nonActiveIndex - 1][1].rankingObj;
+            list = this.buildRankList(rankingObj);
         }
+        wrapper.appendChild(list);
+        return wrapper;
+        */
+
 
         return wrapper;
 
     }, 
 
-
-    // this rotates your data
-    scheduleCarousel: function () {
-        console.log("schedule carousle MMM-PGA");
-        this.rotateInterval = setInterval(() => {
-
-            if (this.config.favorites.length == 0) {
-                this.boardIndex = 0;
-            } else {
-                this.boardIndex = (this.boardIndex == this.numBoards - 1) ? 0 : this.boardIndex + 1;
-            }
-
-            numRankingObj = Object.keys(this.rankingObjs).length;
-            this.nonActiveIndex = (this.nonActiveIndex == numRankingObj )?0 : this.nonActiveIndex+1;
-    
-            this.updateDom(this.config.animationSpeed);
-        }, this.config.rotateInterval);
-    },
-
-
     // Called by MM Framework when new data has been retrieved
     socketNotificationReceived: function (notification, payload) {
         
         if (notification === "PGA_RESULT") {
-            this.tournament =payload;
+            this.currentTournaments = payload;
+            this.multipleCurrent = this.currentTournaments.length > 1;
             this.loaded=true;
-            if (this.rotateInterval == null) {
-                this.scheduleCarousel();
-            }
             this.updateDom(this.config.animationSpeed);
         }
 
         else if (notification == "PGA_TOURNAMENT_LIST") {
-            this.tournaments = payload;
+            this.futureTournaments = payload;
             this.tournamentsLoaded = true;
             this.updateDom(this.config.animationSpeed);
 
