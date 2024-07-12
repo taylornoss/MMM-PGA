@@ -19,20 +19,11 @@ module.exports = {
             const body = await response.json();
 
         var ESPNObj = body.events;
+        //sort events by purse
+        var events = ESPNObj.sort((e1,e2) => (e1.purse < e2.purse)? 1 : (e1.purse < e2.purse) ? -1 : 0);
 
-        var event = null;
-
-        //TODO quick fix for 10/27 must change eventually to suppourt multiple events at the same time
-        //For now there are two events one is cancelled and one is active so just search through and skip
-        //the cancelled event and sho for non cancelled event
-
-        for (j = 0; j < ESPNObj.length; j++) {
-            event = ESPNObj[j];
-            var eventStatus = event.status.type.name;
-            if (eventStatus != "STATUS_CANCELED") {
-                event = ESPNObj[j];
-            }
-        }
+        // 7/11/24 - get the first primary event that isn't canceled - array.find only returns 1 object
+        var event = ESPNObj.find(event => event.primary === true && event.status.type.name !== 'STATUS_CANCELED');
 
         tournament = {};
 
@@ -91,9 +82,7 @@ module.exports = {
         var ESPNObj = body.events;
 
         //Only look at future Tournaments
-        ESPNObj = ESPNObj.filter(function (tournament) {
-            return ((tournament.status == "pre") || (tournament.status == "in"));
-        });
+        ESPNObj = ESPNObj.filter(tournament => tournament.status == "pre" || tournament.status == "in");
 
         if (numTournaments > ESPNObj.length) {
             totalTourn = ESPNObj.length

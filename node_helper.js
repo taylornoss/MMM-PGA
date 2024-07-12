@@ -77,7 +77,7 @@ module.exports = NodeHelper.create({
 
         var self = this;
 
-        if (notification === 'CONFIG') {
+        if (notification === 'MMM-PGA-CONFIG') {
             console.log ("MMM-PGA config received");
             this.config = payload;
             if (this.started !== true) {
