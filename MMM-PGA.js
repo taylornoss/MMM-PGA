@@ -284,7 +284,7 @@ Module.register("MMM-PGA", {
                 if (i == maxVal - 1) lastpos = playerpos;
 
                 if (i > maxVal - 1) {
-                    if (playerpos > lastpos || !this.config.includeTies) break;
+                    if (playerpos > lastpos || !this.config.includeTies || this.multipleCurrent) break;
                 } 
             }
 
