@@ -9,6 +9,7 @@ var ESPN = require('./ESPN.js');
 const OWGR = require('./OWGR.js');
 const FEDEXCUP = require('./FEDEXCUP.js');
 const express = require("express");
+const Log = require('logger');
 
 module.exports = NodeHelper.create({
     requiresVersion: '2.20.0', 
