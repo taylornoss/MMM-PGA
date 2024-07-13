@@ -10,7 +10,7 @@ module.exports = {
 
     async getTournamentData(callback) {
 
-        console.log("ESPN MMM-PGA retrieving Tournament Data");
+        LOG.log("ESPN MMM-PGA retrieving Tournament Data");
 
         const response = await fetch(this.url, {
             method: 'get'
@@ -23,7 +23,7 @@ module.exports = {
 
         // Filter out any canceled events
         var events = ESPNObj.filter(event => event.status.type.name !== 'STATUS_CANCELED');
-
+        LOG.log("ESPN MMM-PGA parsing Tournament Data for "+events.length+" tournaments.");
         let tournaments = [];
         events.forEach((event) => {
             let tournament = {};
@@ -69,6 +69,7 @@ module.exports = {
                 tournaments.push(tournament);
             }
         });
+        LOG.log("ESPN MMM-PGA parsing Tournament Data Complete. "+tournaments.length+" active tournaments ongoing.");
         //Function to send SocketNotification with the Tournament Data
         callback(tournaments);
     },

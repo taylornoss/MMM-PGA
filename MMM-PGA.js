@@ -524,7 +524,6 @@ Module.register("MMM-PGA", {
             var leaderboard = this.buildLeaderBoard(tourney);
             wrapper.appendChild(leaderboard);
         });
-        console.log(this.futureTournaments);
         // Build Upcoming Tournament List
         wrapper.appendChild(this.buildFutureEventsHeader());
         list = this.buildTournamentList(this.futureTournaments);
@@ -538,8 +537,6 @@ Module.register("MMM-PGA", {
         wrapper.appendChild(list);
         return wrapper;
         */
-
-
         return wrapper;
 
     }, 
