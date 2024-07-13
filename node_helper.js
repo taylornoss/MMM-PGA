@@ -77,13 +77,16 @@ module.exports = NodeHelper.create({
         var self = this;
 
         if (notification === 'MMM-PGA-CONFIG') {
-            Log.log ("MMM-PGA config received");
+            Log.log("MMM-PGA config received");
             this.config = payload;
             if (this.started !== true) {
-              this.started = true;
-              this.scheduleUpdate(); 
-              this.scheduleRankingUpdate();
-        
+                this.started = true;
+                this.scheduleUpdate();
+                /* 
+                 EXCLUDE RANKING DATA FOR NOW
+             */
+                //this.scheduleRankingUpdate();
+
             }
 
             //Load Data to begin with so we dont have to wait for next server load
@@ -93,7 +96,7 @@ module.exports = NodeHelper.create({
                 EXCLUDE RANKING DATA FOR NOW
             */
             //this.getRankingData(this.config.maxNumRankings, this.config.rapidAPIKey);
-            
+
         }
         
             
