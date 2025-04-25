@@ -298,9 +298,12 @@ Module.register("MMM-PGA", {
                 var pind = (player.playoff)?"►":"";
                 lbrow.appendChild(this.buildTD(pind,["td-playoff"]));
             }
-            if (this.config.showFlags) {
+            if (this.config.showFlags && player.flagHref !== '') {
                 var fHTML = this.flaghtml.replace("http", player.flagHref);
                 lbrow.appendChild(this.buildTD(fHTML,["td-img"]));               
+            }
+            else if (player.flagHref === '') {
+              lbrow.appendChild(this.buildTD(''));
             }
             lbrow.appendChild(this.buildTD(player.name));
 

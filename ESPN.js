@@ -23,7 +23,7 @@ module.exports = {
 
         // Filter out any canceled events
         var events = ESPNObj.filter(event => event.status.type.name !== 'STATUS_CANCELED');
-        LOG.log("ESPN MMM-PGA parsing Tournament Data for "+events.length+" tournaments.");
+        LOG.log("ESPN MMM-PGA parsing Tournament Data for " + events.length + " tournaments.");
         let tournaments = [];
         events.forEach((event) => {
             let tournament = {};
@@ -53,15 +53,31 @@ module.exports = {
                     if (espnPlayer.status.playoff)
                         tournament.playoff = true;
 
+                    // Adapt for team events
+                    if (espnPlayer.athlete) {
+                        var name = espnPlayer.athlete.displayName
+                        var flagHref = espnPlayer.athlete.flag.href
+                        var playerID = espnPlayer.athlete.id
+                    }
+                    else if (espnPlayer.team) {
+                        name = espnPlayer.team.displayName
+                        flagHref = ''
+                        playerID = espnPlayer.id
+                    }
+                    else {
+                        name = 'Name not avail.'
+                        flagHref = ''
+                        playerID = 'n/a'
+                    }
                     tournament.players.push({
-                        "name": espnPlayer.athlete.displayName,
+                        "name": name,
                         "position": espnPlayer.status.position.displayName,
                         "posId": parseInt(espnPlayer.status.position.id),
-                        "flagHref": espnPlayer.athlete.flag.href,
+                        "flagHref": flagHref,
                         "score": espnPlayer.statistics[0].displayValue,
                         "thru": this.getPlayerThru(espnPlayer),
                         "roundScore": this.getRoundScore(espnPlayer, tournament.currentRound),
-                        "id": espnPlayer.athlete.id,
+                        "id": playerID,
                         "sortOrder": espnPlayer.sortOrder,
                         "playoff": espnPlayer.status.playoff
                     });
@@ -69,7 +85,7 @@ module.exports = {
                 tournaments.push(tournament);
             }
         });
-        LOG.log("ESPN MMM-PGA parsing Tournament Data Complete. "+tournaments.length+" active tournaments ongoing.");
+        LOG.log("ESPN MMM-PGA parsing Tournament Data Complete. " + tournaments.length + " active tournaments ongoing.");
         //Function to send SocketNotification with the Tournament Data
         callback(tournaments);
     },
@@ -82,7 +98,7 @@ module.exports = {
         })
 
         const body = await response.json();
-        
+
         var ESPNObj = body.events;
 
         //Only look at future Tournaments
@@ -99,17 +115,17 @@ module.exports = {
         for (i = 0; i < totalTourn; i++) {
             var tournament = ESPNObj[i];
             var tourName = tournament.name ? tournament.name : ""
-                var strDate = tournament.startDate ? tournament.startDate : ""
-                var nDate = tournament.endDate ? tournament.endDate : ""
-                var venue = tournament.locations[0] ? tournament.locations[0].venue.fullName : ""
-                tournaments.push({
-                    "name": tourName, //tournament.name,
-                    "date": this.getEventDate(strDate, nDate), //tournament.startDate,tournament.endDate),
-                    "location": venue, //tournament.locations[0].venue.fullName,
-                    "purse": this.setUndefStr(tournament.purse, "TBD"),
-                    "defendingChamp": this.setUndefStr(tournament.athlete.name)
+            var strDate = tournament.startDate ? tournament.startDate : ""
+            var nDate = tournament.endDate ? tournament.endDate : ""
+            var venue = tournament.locations[0] ? tournament.locations[0].venue.fullName : ""
+            tournaments.push({
+                "name": tourName, //tournament.name,
+                "date": this.getEventDate(strDate, nDate), //tournament.startDate,tournament.endDate),
+                "location": venue, //tournament.locations[0].venue.fullName,
+                "purse": this.setUndefStr(tournament.purse, "TBD"),
+                "defendingChamp": this.setUndefStr(tournament.athlete.name)
 
-                });
+            });
         }
 
         callback(tournaments);
